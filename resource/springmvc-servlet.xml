@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+        
+	<!-- <bean name="/index.hhh" class="controller.IndexController"/> -->
+	<context:component-scan base-package="action"/>  
+	<!-- <mvc:resources location="/statics/**" mapping="/statics/**"/> --> 
+	<!-- annotation:注释  driven:驱动 -->
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>application/json;charset=UTF-8</value>
+						<value>text/json;charset=UTF-8</value>
+						<value>text/html;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	
+	
+	<!-- 完成视图的对应 -->
+	<!-- 对转向页面的路径解析。prefix：前缀， suffix：后缀 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
+		<property name="prefix" value="/WEB-INF/jsp/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	
+	<mvc:interceptors>  
+	 	<mvc:interceptor>  
+	        <!-- 进行拦截：/**表示拦截所有controller -->
+	        <mvc:mapping path="/**" />
+	    	<!-- 不进行拦截 -->
+	        <mvc:exclude-mapping path="/doRegister.do"/>
+	        <mvc:exclude-mapping path="/login.do"/>
+	        <mvc:exclude-mapping path="/loginOut.do"/>
+	        <mvc:exclude-mapping path="/register.do"/>
+	        <bean class="intercepter.AutoLoginIntercepter"/>  
+	    </mvc:interceptor>
+	   <!--  使用bean定义一个Interceptor，直接定义在mvc:interceptors根下面的Interceptor将拦截所有的请求   -->
+	    <!-- <bean class="com.bybo.aca.web.interceptor.Login"/> -->   
+	    <mvc:interceptor>  
+	        <!-- 进行拦截：/**表示拦截所有controller -->
+	        <mvc:mapping path="/car*/*" />
+	    	<!-- 不进行拦截 -->
+	        <!-- <mvc:exclude-mapping path="/index.html"/> -->
+	        <bean class="intercepter.LoginIntercepter"/>  
+	    </mvc:interceptor>
+	      <mvc:interceptor>  
+	        <!-- 进行拦截：/**表示拦截所有controller -->
+	        <mvc:mapping path="/**" />
+	    	<!-- 不进行拦截 -->
+	        <mvc:exclude-mapping path="/doRegister.do"/>
+	        <mvc:exclude-mapping path="/login.do"/>
+	        <mvc:exclude-mapping path="/loginOut.do"/>
+	        <mvc:exclude-mapping path="/register.do"/>
+	        <bean class="intercepter.AutoLoginIntercepter"/>  
+	    </mvc:interceptor>
+	      <mvc:interceptor>  
+	        <!-- 进行拦截：/**表示拦截所有controller -->
+	        <mvc:mapping path="/**" />
+	    	<!-- 不进行拦截 -->
+	        <mvc:exclude-mapping path="/doRegister.do"/>
+	        <mvc:exclude-mapping path="/login.do"/>
+	        <mvc:exclude-mapping path="/loginOut.do"/>
+	        <mvc:exclude-mapping path="/register.do"/>
+	        <bean class="intercepter.AutoLoginIntercepter"/>  
+	    </mvc:interceptor>
+	</mvc:interceptors>   
+	
+	
+	
+	<!-- 实现上传配置  -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"></bean>
+	
+	
+	
+	
+</beans>
